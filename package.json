@@ -2,7 +2,7 @@
   "name": "capital_hill_cleaning_emporium_cdk",
   "version": "0.1.0",
   "bin": {
-    "capital_hill_cleaning_emporium_cdk": "bin/capital_hill_cleaning_emporium_cdk.js"
+    "capital_hill_cleaning_emporium_cdk": "bin/app.js"
   },
   "scripts": {
     "build": "tsc",

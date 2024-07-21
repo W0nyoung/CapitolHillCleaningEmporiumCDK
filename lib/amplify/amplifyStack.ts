@@ -1,8 +1,7 @@
 import { Stack, StackProps, SecretValue } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { App, GitHubSourceCodeProvider } from '@aws-cdk/aws-amplify-alpha' 
+import { App, GitHubSourceCodeProvider, Platform } from '@aws-cdk/aws-amplify-alpha' 
 import { Config } from '../../bin/config';
-import { BuildSpec } from 'aws-cdk-lib/aws-codebuild';
 
 export class AmplifyStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
@@ -14,7 +13,8 @@ export class AmplifyStack extends Stack {
                 repository: Config.websiteGithubRepo,
                 oauthToken: SecretValue.secretsManager(Config.githubTokenKey)
             }),
-            appName: `${Config.websiteGithubRepo}-${getBranch(this.account)}`
+            appName: `${Config.websiteGithubRepo}-${getBranch(this.account)}`,
+            platform: Platform.WEB_COMPUTE
         });
 
         amplify.addBranch(getBranch(this.account));

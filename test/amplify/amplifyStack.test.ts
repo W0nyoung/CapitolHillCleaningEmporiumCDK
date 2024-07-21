@@ -2,6 +2,7 @@ import { App } from "aws-cdk-lib";
 import { Config } from "../../bin/config";
 import { AmplifyStack } from "../../lib/amplify/amplifyStack";
 import { Template } from "aws-cdk-lib/assertions";
+import { Platform } from '@aws-cdk/aws-amplify-alpha' 
 
 const app = new App();
 
@@ -27,7 +28,8 @@ describe('Testing Amplify Stack', () => {
     test('Test Staging Amplify App', () => {
         stagingTemplate.hasResourceProperties('AWS::Amplify::App', {
             Repository: `https://github.com/${Config.websiteGithubOwner}/${Config.websiteGithubRepo}`,
-            OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`
+            OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`,
+            Platform: Platform.WEB_COMPUTE
         });
 
         stagingTemplate.hasResourceProperties('AWS::Amplify::Branch', {
@@ -38,7 +40,8 @@ describe('Testing Amplify Stack', () => {
     test('Test Prod Amplify App', () => {
         prodTemplate.hasResourceProperties('AWS::Amplify::App', {
             Repository: `https://github.com/${Config.websiteGithubOwner}/${Config.websiteGithubRepo}`,
-            OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`
+            OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`,
+            Platform: Platform.WEB_COMPUTE
         });
 
         prodTemplate.hasResourceProperties('AWS::Amplify::Branch', {

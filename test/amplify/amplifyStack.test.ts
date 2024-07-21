@@ -26,7 +26,6 @@ describe('Testing Amplify Stack', () => {
 
     test('Test Staging Amplify App', () => {
         stagingTemplate.hasResourceProperties('AWS::Amplify::App', {
-            BuildSpec: './amplify.yml',
             Repository: `https://github.com/${Config.websiteGithubOwner}/${Config.websiteGithubRepo}`,
             OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`
         });
@@ -38,7 +37,6 @@ describe('Testing Amplify Stack', () => {
 
     test('Test Prod Amplify App', () => {
         prodTemplate.hasResourceProperties('AWS::Amplify::App', {
-            BuildSpec: './amplify.yml',
             Repository: `https://github.com/${Config.websiteGithubOwner}/${Config.websiteGithubRepo}`,
             OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`
         });

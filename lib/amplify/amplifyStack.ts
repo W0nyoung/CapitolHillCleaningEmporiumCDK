@@ -14,7 +14,6 @@ export class AmplifyStack extends Stack {
                 repository: Config.websiteGithubRepo,
                 oauthToken: SecretValue.secretsManager(Config.githubTokenKey)
             }),
-            buildSpec: BuildSpec.fromSourceFilename('./amplify.yml'),
             appName: `${Config.websiteGithubRepo}-${getBranch(this.account)}`
         });
 

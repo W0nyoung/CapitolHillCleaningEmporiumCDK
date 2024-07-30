@@ -13,8 +13,7 @@ export class AmplifyStack extends Stack {
                 repository: Config.websiteGithubRepo,
                 oauthToken: SecretValue.secretsManager(Config.githubTokenKey)
             }),
-            appName: `${Config.websiteGithubRepo}-${getBranch(this.account)}`,
-            platform: Platform.WEB_COMPUTE
+            appName: `${Config.websiteGithubRepo}-${getBranch(this.account)}`
         });
 
         amplify.addBranch(getBranch(this.account));

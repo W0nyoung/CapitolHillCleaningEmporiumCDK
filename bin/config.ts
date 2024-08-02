@@ -6,5 +6,7 @@ export const Config = {
     githubRepo: 'W0nyoung/CapitolHillCleaningEmporiumCDK',
     websiteGithubRepo: 'CapitolHillCleaningEmporiumUI',
     websiteGithubOwner: 'tyrakrehbiel',
-    githubTokenKey: 'GitHubToken'
+    githubTokenKey: 'GitHubToken',
+    rootLevelDomain: 'capitolhillcleaningemporium.com',
+    rootHostedZoneID: 'Z08291237IFX56AZ3TA8'
 }

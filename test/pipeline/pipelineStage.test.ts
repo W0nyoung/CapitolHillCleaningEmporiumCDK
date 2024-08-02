@@ -16,29 +16,47 @@ const template = Template.fromStack(stack);
 
 describe('Testing PipelineStage Stack', () => {
 
-    test('Staging stage has Amplify Stack', () => {
-        template.hasResourceProperties('AWS::CodePipeline::Pipeline', {
-            Stages: Match.arrayWith([Match.objectLike({
-              Name: 'StagingAccountStage',
-              Actions: Match.arrayWith([Match.objectLike({
+  test('Staging stage has Stacks in Correct Order', () => {
+    template.hasResourceProperties('AWS::CodePipeline::Pipeline', {
+        Stages: Match.arrayWith([
+          Match.objectLike({
+            Name: 'StagingAccountStage',
+            Actions: Match.arrayWith([
+              Match.objectLike({
+                Configuration: Match.objectLike({
+                  StackName: Match.stringLikeRegexp('StagingAccountStage-Route53Stack-*')
+                })
+              }),
+              Match.objectLike({
                 Configuration: Match.objectLike({
                   StackName: Match.stringLikeRegexp('StagingAccountStage-AmplifyStack-*')
                 })
-              })])
-            })])
-        });
+              })
+            ])
+          })
+        ])
+      });
     });
 
-    test('Prod stage has Amplify Stack', () => {
-        template.hasResourceProperties('AWS::CodePipeline::Pipeline', {
-            Stages: Match.arrayWith([Match.objectLike({
-              Name: 'ProdAccountStage',
-              Actions: Match.arrayWith([Match.objectLike({
+  test('Prod stage has Stacks in Correct Order', () => {
+    template.hasResourceProperties('AWS::CodePipeline::Pipeline', {
+        Stages: Match.arrayWith([
+          Match.objectLike({
+            Name: 'ProdAccountStage',
+            Actions: Match.arrayWith([
+              Match.objectLike({
+                Configuration: Match.objectLike({
+                  StackName: Match.stringLikeRegexp('ProdAccountStage-Route53Stack-*')
+                })
+              }),
+              Match.objectLike({
                 Configuration: Match.objectLike({
                   StackName: Match.stringLikeRegexp('ProdAccountStage-AmplifyStack-*')
                 })
-              })])
-            })])
-        });
+              })
+            ])
+          })
+        ])
+      });
     });
 });

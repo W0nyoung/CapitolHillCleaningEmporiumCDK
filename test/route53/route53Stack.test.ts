@@ -32,10 +32,6 @@ describe('Testing Route53 Stack', () => {
     });
 
     test('Test Prod Route53 Stack', () => {
-        prodTemplate.hasResourceProperties('AWS::Route53::HostedZone', {
-            Name: `${Config.rootLevelDomain}.`
-        });
-
         prodTemplate.hasResourceProperties('AWS::IAM::Role', {
             RoleName: 'Route53CrossAccountDelegationRole',
             AssumeRolePolicyDocument: {

@@ -4,6 +4,12 @@ import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelin
 import { Config } from '../../bin/config';
 import { PipelineStage } from './pipelineStage';
 
+/**
+ * AWS CodePipeline CDK Stack
+ * GitHub Token for CDK Repo is stored in AWS Secrets Manager
+ * Pipeline tracks main branch and will deploy changes whenever a change is pushed to main
+ * Pipeline stages, staging and prod, are defined here
+ */
 export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);

@@ -1,7 +1,7 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Config } from '../../bin/config';
-import { HostedZone, PublicHostedZone } from 'aws-cdk-lib/aws-route53';
+import { CrossAccountZoneDelegationRecord, HostedZone, PublicHostedZone } from 'aws-cdk-lib/aws-route53';
 import { AccountPrincipal, Effect, PolicyDocument, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
 
 /**
@@ -61,7 +61,21 @@ export class Route53Stack extends Stack {
                 zoneName: `staging.${Config.rootLevelDomain}`
             });
 
-            // Todo: Create Cross Account Zone delegation
+            // import the delegation role from Prod account by constructing the roleArn
+            const delegationRoleArn = Stack.of(this).formatArn({
+              region: '', // IAM is global in each partition
+              service: 'iam',
+              account: Config.prodAccount,
+              resource: 'role',
+              resourceName: 'Route53CrossAccountDelegationRole',
+            });
+            const delegationRole = Role.fromRoleArn(this, 'CrossAccountRole', delegationRoleArn);
+
+            new CrossAccountZoneDelegationRecord(this, 'delegate', {
+              delegatedZone: subZone,
+              parentHostedZoneId: Config.rootHostedZoneID,
+              delegationRole
+            });
         }
     };
 };

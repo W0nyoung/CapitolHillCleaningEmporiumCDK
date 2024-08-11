@@ -1,8 +1,7 @@
 import { App } from "aws-cdk-lib";
 import { Config } from "../../bin/config";
 import { AmplifyStack } from "../../lib/amplify/amplifyStack";
-import { Template } from "aws-cdk-lib/assertions";
-import { Platform } from '@aws-cdk/aws-amplify-alpha' 
+import { Match, Template } from "aws-cdk-lib/assertions";
 
 const app = new App();
 
@@ -34,6 +33,15 @@ describe('Testing Amplify Stack', () => {
         stagingTemplate.hasResourceProperties('AWS::Amplify::Branch', {
             BranchName: 'staging' 
         });
+
+        stagingTemplate.hasResourceProperties('AWS::Amplify::Domain', {
+            DomainName: `staging.${Config.rootLevelDomain}`,
+            SubDomainSettings: Match.arrayWith([
+                Match.objectLike({
+                    Prefix: 'www'
+                })
+            ])
+        });
     });
 
     test('Test Prod Amplify App', () => {
@@ -44,6 +52,15 @@ describe('Testing Amplify Stack', () => {
 
         prodTemplate.hasResourceProperties('AWS::Amplify::Branch', {
             BranchName: 'main' 
+        });
+
+        prodTemplate.hasResourceProperties('AWS::Amplify::Domain', {
+            DomainName: Config.rootLevelDomain,
+            SubDomainSettings: Match.arrayWith([
+                Match.objectLike({
+                    Prefix: 'www'
+                })
+            ])
         });
     });
 });

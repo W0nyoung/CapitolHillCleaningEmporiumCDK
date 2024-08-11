@@ -28,7 +28,28 @@ describe('Testing Route53 Stack', () => {
             Name: `staging.${Config.rootLevelDomain}.`
         });
 
-        stagingTemplate.resourceCountIs('AWS::IAM::Role', 0);
+        stagingTemplate.hasResourceProperties('AWS::IAM::Policy', {
+            PolicyDocument: {
+                Statement: Match.arrayWith([
+                    Match.objectLike({
+                        Action: 'sts:AssumeRole',
+                        Effect: 'Allow',
+                        Resource: {
+                            'Fn::Join': [
+                                '', 
+                                [
+                                    'arn:',
+                                    {
+                                        'Ref': 'AWS::Partition'
+                                    },
+                                    `:iam::${Config.prodAccount}:role/Route53CrossAccountDelegationRole`
+                                ]
+                            ]
+                        }
+                    })
+                ])
+            }
+        });
     });
 
     test('Test Prod Route53 Stack', () => {

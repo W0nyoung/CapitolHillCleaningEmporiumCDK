@@ -2,6 +2,10 @@ import { App } from "aws-cdk-lib";
 import { Config } from "../../bin/config";
 import { AmplifyStack } from "../../lib/amplify/amplifyStack";
 import { Match, Template } from "aws-cdk-lib/assertions";
+import { RedirectStatus } from "@aws-cdk/aws-amplify-alpha";
+
+const redirectSource = "</^(?!/$)(.*)/$/>";
+const redirectTarget = "/index.html";
 
 const app = new App();
 
@@ -27,7 +31,12 @@ describe('Testing Amplify Stack', () => {
     test('Test Staging Amplify App', () => {
         stagingTemplate.hasResourceProperties('AWS::Amplify::App', {
             Repository: `https://github.com/${Config.websiteGithubOwner}/${Config.websiteGithubRepo}`,
-            OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`
+            OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`,
+            CustomRules : Match.arrayWith([Match.objectLike({
+                Source: redirectSource,
+                Target: redirectTarget,
+                Status: RedirectStatus.REWRITE
+            })])
         });
 
         stagingTemplate.hasResourceProperties('AWS::Amplify::Branch', {
@@ -47,7 +56,12 @@ describe('Testing Amplify Stack', () => {
     test('Test Prod Amplify App', () => {
         prodTemplate.hasResourceProperties('AWS::Amplify::App', {
             Repository: `https://github.com/${Config.websiteGithubOwner}/${Config.websiteGithubRepo}`,
-            OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`
+            OauthToken: `{{resolve:secretsmanager:${Config.githubTokenKey}:SecretString:::}}`,
+            CustomRules : Match.arrayWith([Match.objectLike({
+                Source: redirectSource,
+                Target: redirectTarget,
+                Status: RedirectStatus.REWRITE
+            })])
         });
 
         prodTemplate.hasResourceProperties('AWS::Amplify::Branch', {

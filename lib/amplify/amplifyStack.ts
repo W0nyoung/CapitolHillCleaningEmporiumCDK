@@ -1,6 +1,6 @@
 import { Stack, StackProps, SecretValue } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { App, GitHubSourceCodeProvider } from '@aws-cdk/aws-amplify-alpha' 
+import { App, GitHubSourceCodeProvider, RedirectStatus } from '@aws-cdk/aws-amplify-alpha' 
 import { Config } from '../../bin/config';
 
 /**
@@ -26,6 +26,12 @@ export class AmplifyStack extends Stack {
         const domain = amplify.addDomain(getDomain(this.account));
         domain.mapRoot(branch);
         domain.mapSubDomain(branch, 'www');
+
+        amplify.addCustomRule({
+            source: "</^(?!/$)(.*)/$/>",
+            target: "/index.html",
+            status: RedirectStatus.REWRITE
+        });
     };
 };
 
